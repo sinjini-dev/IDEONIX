@@ -3,7 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3, os, json, requests
 from datetime import datetime
 
-GEMINI_API_KEY = "AIzaSyDPZYcwKOw8BGmaRmx9H9ULRvL0m25-0a4"
+import os
+GEMINI_API_KEY = os.environ.get( "GEMINI_API_KEY","AIzaSyDPZYcwKOw8BGmaRmx9H9ULRvL0m25-0a4")
 
 def ask_gemini(prompt):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
