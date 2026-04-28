@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}IDEONIX – AI-Powered Volunteer Coordination{% endblock %}
+{% block extra_style %}
+.hero{background:var(--ink);color:#fff;padding:5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,rgba(0,137,123,.35) 0%,transparent 65%)}
+.hero h1{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;line-height:1.1;position:relative}
+.hero h1 span{color:var(--teal-light)}
+.hero p{margin:1.2rem auto 0;max-width:560px;color:#aaa;font-size:1.05rem;position:relative}
+.hero-btns{display:flex;gap:1rem;justify-content:center;margin-top:2rem;position:relative}
+.features{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;padding:3rem 2rem;max-width:1100px;margin:0 auto}
+.feat-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:1.8rem}
+.feat-icon{font-size:2rem;margin-bottom:.8rem}
+.feat-card h3{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:.4rem}
+.feat-card p{color:var(--muted);font-size:.9rem;line-height:1.6}
+.demo-section{background:var(--ink);color:#fff;padding:3rem 2rem;text-align:center}
+.demo-section h2{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:.5rem}
+.demo-section p{color:#aaa;margin-bottom:1.5rem}
+{% endblock %}
+{% block content %}
+<div class="hero">
+  <h1>Smart Volunteer<br/>Coordination with <span>AI</span></h1>
+  <p>IDEONIX connects NGOs with the right volunteers at the right time — powered by intelligent need analysis.</p>
+  <div class="hero-btns">
+    <a href="/signup" class="btn btn-primary" style="padding:.7rem 2rem;font-size:1rem">Get Started</a>
+    <a href="/tasks" class="btn btn-outline" style="padding:.7rem 2rem;font-size:1rem;color:#fff;border-color:#555">Browse Tasks</a>
+  </div>
+</div>
+
+<div class="features">
+  <div class="feat-card">
+    <div class="feat-icon">🏥</div>
+    <h3>NGO Needs Board</h3>
+    <p>Post community tasks with urgency levels and required skills. Reach the right volunteers instantly.</p>
+  </div>
+  <div class="feat-card">
+    <div class="feat-icon">🤝</div>
+    <h3>Volunteer Registry</h3>
+    <p>Volunteers register their skills, availability and location — ready to be matched when needed most.</p>
+  </div>
+  <div class="feat-card">
+    <div class="feat-icon">🤖</div>
+    <h3>AI Smart Matching</h3>
+    <p>Gemini AI analyzes tasks and volunteer profiles to find the best match with a scored explanation.</p>
+  </div>
+  <div class="feat-card">
+    <div class="feat-icon">📊</div>
+    <h3>Impact Analytics</h3>
+    <p>Real-time dashboard showing community needs, volunteer engagement, and overall social impact.</p>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>Built for Social Impact</h2>
+  <p>Join NGOs and volunteers already making a difference in their communities.</p>
+  <a href="/signup" class="btn btn-primary" style="font-size:1rem;padding:.7rem 2rem">Join IDEONIX →</a>
+</div>
+{% endblock %}

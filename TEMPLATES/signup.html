@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Sign Up – IDEONIX{% endblock %}
+{% block extra_style %}
+.auth-wrap{max-width:520px;margin:3rem auto;padding:0 1.5rem}
+.auth-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:2.2rem}
+.auth-card h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;margin-bottom:.3rem}
+.auth-card p{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+.role-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem}
+.role-tab{flex:1;padding:.6rem;border:2px solid var(--border);border-radius:8px;text-align:center;cursor:pointer;font-weight:500;font-size:.9rem;transition:all .2s}
+.role-tab.active{border-color:var(--teal);background:#f0fdf9;color:var(--teal)}
+.extra-fields{display:none}
+.extra-fields.show{display:block}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h2>Create Account</h2>
+    <p>Join IDEONIX as an NGO or Volunteer</p>
+
+    <div class="role-tabs">
+      <div class="role-tab active" onclick="setRole('volunteer')">🤝 Volunteer</div>
+      <div class="role-tab" onclick="setRole('ngo')">🏢 NGO / Organization</div>
+    </div>
+
+    <form method="POST">
+      <input type="hidden" name="role" id="role_input" value="volunteer"/>
+      <div class="row2">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="name" placeholder="Your name" required/>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="you@email.com" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Min 6 characters" required minlength="6"/>
+      </div>
+
+      <!-- Volunteer fields -->
+      <div class="extra-fields show" id="vol_fields">
+        <div class="form-group">
+          <label>Your Skills <span style="color:var(--muted)">(comma-separated)</span></label>
+          <input type="text" name="skills" placeholder="e.g. teaching, medical, social work, coding"/>
+        </div>
+        <div class="row2">
+          <div class="form-group">
+            <label>Availability</label>
+            <select name="availability">
+              <option value="anytime">Anytime</option>
+              <option value="weekends">Weekends</option>
+              <option value="weekdays">Weekdays</option>
+              <option value="evenings">Evenings</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Location / City</label>
+            <input type="text" name="location" placeholder="e.g. Mumbai"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- NGO fields -->
+      <div class="extra-fields" id="ngo_fields">
+        <div class="form-group">
+          <label>Organization Name</label>
+          <input type="text" name="org_name" placeholder="e.g. Hope Foundation"/>
+        </div>
+        <div class="row2">
+          <div class="form-group">
+            <label>Location / City</label>
+            <input type="text" name="location" placeholder="e.g. Delhi"/>
+          </div>
+          <div class="form-group"><!-- spacer --></div>
+        </div>
+        <div class="form-group">
+          <label>About your Organization</label>
+          <textarea name="description" placeholder="What does your NGO do?"></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:.75rem">Create Account</button>
+    </form>
+    <p style="text-align:center;margin-top:1rem;font-size:.9rem;color:var(--muted)">
+      Already have an account? <a href="/login" style="color:var(--teal);font-weight:500">Log in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function setRole(r){
+  document.getElementById('role_input').value = r;
+  document.querySelectorAll('.role-tab').forEach((t,i)=>t.classList.toggle('active',i===(r==='volunteer'?0:1)));
+  document.getElementById('vol_fields').classList.toggle('show', r==='volunteer');
+  document.getElementById('ngo_fields').classList.toggle('show', r==='ngo');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Volunteer Dashboard – IDEONIX{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>Volunteer Dashboard</h1>
+    <p>Welcome, {{ session.name }} 👋</p>
+  </div>
+
+  {% if profile %}
+  <div class="card" style="margin-bottom:2rem">
+    <div class="section-title">My Profile</div>
+    <div style="display:flex;gap:2rem;flex-wrap:wrap">
+      <div><span style="color:var(--muted);font-size:.85rem">SKILLS</span><br/><strong>{{ profile.skills or 'Not set' }}</strong></div>
+      <div><span style="color:var(--muted);font-size:.85rem">AVAILABILITY</span><br/><strong>{{ profile.availability or 'Not set' }}</strong></div>
+      <div><span style="color:var(--muted);font-size:.85rem">LOCATION</span><br/><strong>{{ profile.location or 'Not set' }}</strong></div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="section-title">My Task Matches</div>
+
+  {% if not matches %}
+    <div class="card" style="text-align:center;padding:3rem;color:var(--muted)">
+      No matches yet — NGOs will match you to tasks using AI. 
+      <br/><a href="/tasks" style="color:var(--teal);margin-top:.5rem;display:inline-block">Browse open tasks →</a>
+    </div>
+  {% endif %}
+
+  {% for m in matches %}
+  <div class="card" style="margin-bottom:1rem">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem">
+      <div>
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem">
+          <h3 style="font-family:'Syne',sans-serif;font-weight:700">{{ m.title }}</h3>
+          <span class="badge badge-{{ m.urgency }}">{{ m.urgency|upper }}</span>
+        </div>
+        <p style="color:var(--muted);font-size:.85rem">🏢 {{ m.ngo_name }} &nbsp;|&nbsp; 📍 {{ m.location }}</p>
+        <p style="color:var(--muted);font-size:.85rem;margin-top:.2rem">🛠 Required: {{ m.required_skills }}</p>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--teal)">{{ m.score }}<span style="font-size:.8rem;color:var(--muted)">/100</span></div>
+        <div style="font-size:.75rem;color:var(--muted)">AI Match Score</div>
+      </div>
+    </div>
+    <div style="margin-top:.8rem;padding:.7rem;background:#f0fdf9;border-radius:8px;font-size:.87rem">
+      🤖 <strong>AI Reason:</strong> {{ m.ai_reason }}
+    </div>
+    {% if m.status == 'pending' %}
+    <div style="margin-top:.8rem">
+      <form method="POST" action="/match/accept/{{ m.id }}" style="display:inline">
+        <button class="btn btn-primary btn-sm">✅ Accept Task</button>
+      </form>
+      <span style="margin-left:.5rem;font-size:.8rem;color:var(--muted)">Status: Pending</span>
+    </div>
+    {% else %}
+    <div style="margin-top:.8rem">
+      <span class="badge" style="background:#d1fae5;color:#065f46;font-size:.8rem">✅ Accepted</span>
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

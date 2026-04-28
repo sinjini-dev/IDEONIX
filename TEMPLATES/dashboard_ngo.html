@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}NGO Dashboard – IDEONIX{% endblock %}
+{% block extra_style %}
+.task-row{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:.8rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.task-row h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;flex:1}
+.match-panel{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-top:.8rem;display:none}
+.match-panel.open{display:block}
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+    <div>
+      <h1>NGO Dashboard</h1>
+      <p>Welcome, {{ session.name }} 👋  — {{ profile.org_name if profile }}</p>
+    </div>
+    <div style="display:flex;gap:.7rem;flex-wrap:wrap">
+      <button class="btn btn-orange" onclick="globalMatch()">🤖 AI Match All Tasks</button>
+      <a href="/tasks/new" class="btn btn-primary">+ Post New Task</a>
+    </div>
+  </div>
+
+  <div class="section-title">Your Posted Tasks</div>
+
+  {% if not tasks %}
+    <div class="card" style="text-align:center;padding:3rem;color:var(--muted)">
+      No tasks yet. <a href="/tasks/new" style="color:var(--teal)">Post your first task →</a>
+    </div>
+  {% endif %}
+
+  {% for task in tasks %}
+  <div class="task-row" id="task-{{ task.id }}">
+    <div style="flex:1;min-width:200px">
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.3rem">
+        <h3>{{ task.title }}</h3>
+        <span class="badge badge-{{ task.urgency }}">{{ task.urgency|upper }}</span>
+        <span class="badge badge-open">{{ task.status }}</span>
+      </div>
+      <p style="color:var(--muted);font-size:.85rem">📍 {{ task.location }} &nbsp;|&nbsp; 🛠 {{ task.required_skills }}</p>
+    </div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" onclick="viewMatches({{ task.id }})">👥 View Matches</button>
+      <button class="btn btn-secondary btn-sm" onclick="runMatch({{ task.id }}, this)">
+        🤖 AI Match <span class="spinner" id="spin-{{ task.id }}"></span>
+      </button>
+    </div>
+    <div class="match-panel" id="panel-{{ task.id }}">
+      <div id="results-{{ task.id }}">Loading matches…</div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+async function runMatch(taskId, btn){
+  const spinner = document.getElementById('spin-'+taskId);
+  spinner.style.display='inline-block'; btn.disabled=true;
+  const res = await fetch('/match/'+taskId, {method:'POST'});
+  const data = await res.json();
+  spinner.style.display='none'; btn.disabled=false;
+  if(data.error){alert('Error: '+data.error); return;}
+  viewMatches(taskId);
+}
+
+async function viewMatches(taskId){
+  const panel = document.getElementById('panel-'+taskId);
+  panel.classList.toggle('open');
+  if(!panel.classList.contains('open')) return;
+  const res = await fetch('/match/status/'+taskId);
+  const data = await res.json();
+  const div = document.getElementById('results-'+taskId);
+  if(!data.length){div.innerHTML='<p style="color:var(--muted);font-size:.9rem">No matches yet. Click "AI Match" to generate.</p>';return;}
+  div.innerHTML = data.map(m=>`
+    <div class="match-item">
+      <div class="score-ring">${m.score}</div>
+      <div class="match-info">
+        <h4>${m.name} <span class="badge badge-teal" style="font-size:.7rem">${m.availability}</span></h4>
+        <p>🛠 ${m.skills}</p>
+        <p style="margin-top:.3rem">🤖 ${m.ai_reason}</p>
+      </div>
+    </div>`).join('');
+}
+
+async function globalMatch(){
+  if(!confirm('Run AI matching for ALL your open tasks?')) return;
+  const btn = event.target;
+  btn.disabled=true; btn.textContent='⏳ Matching…';
+  const res = await fetch('/match/global',{method:'POST'});
+  const data = await res.json();
+  btn.disabled=false; btn.textContent='🤖 AI Match All Tasks';
+  if(data.error){alert('Error: '+data.error); return;}
+  alert('✅ Matching complete! Click "View Matches" on each task to see results.');
+}
+</script>
+{% endblock %}

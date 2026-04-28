@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Open Tasks – IDEONIX{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>Open Community Tasks</h1>
+    <p>Tasks posted by NGOs — sorted by urgency</p>
+  </div>
+
+  {% if not tasks %}
+    <div class="card" style="text-align:center;padding:3rem;color:var(--muted)">
+      No open tasks yet. NGOs will post needs here.
+    </div>
+  {% endif %}
+
+  <div class="card-grid">
+    {% for task in tasks %}
+    <div class="card" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <span class="badge badge-{{ task.urgency }}">{{ task.urgency|upper }}</span>
+        <span style="font-size:.8rem;color:var(--muted)">{{ task.created_at[:10] }}</span>
+      </div>
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem">{{ task.title }}</h3>
+      <p style="color:var(--muted);font-size:.85rem;flex:1">{{ task.description[:120] }}{% if task.description|length > 120 %}…{% endif %}</p>
+      <hr style="border:none;border-top:1px solid var(--border)"/>
+      <div style="font-size:.82rem;color:var(--muted)">
+        🏢 {{ task.org_name or task.ngo_name }}<br/>
+        📍 {{ task.location }}<br/>
+        🛠 {{ task.required_skills }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

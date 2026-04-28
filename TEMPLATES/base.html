@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>{% block title %}IDEONIX{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#0d0d0d; --cream:#f5f0e8; --teal:#00897b; --teal-light:#4db6ac;
+  --orange:#ff6f00; --muted:#6b7280; --card:#ffffff; --border:#e5e7eb;
+  --danger:#ef4444; --success:#10b981;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+nav{background:var(--ink);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100}
+.nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:#fff;letter-spacing:-0.5px}
+.nav-brand span{color:var(--teal-light)}
+.nav-links{display:flex;align-items:center;gap:0.5rem}
+.nav-links a{color:#ccc;font-size:.9rem;padding:.4rem .8rem;border-radius:6px;transition:all .2s}
+.nav-links a:hover{color:#fff;background:rgba(255,255,255,.1)}
+.nav-links .btn-nav{background:var(--teal);color:#fff;padding:.4rem 1rem;border-radius:20px}
+.nav-links .btn-nav:hover{background:var(--teal-light)}
+
+/* FLASH */
+.flash-container{max-width:1100px;margin:1rem auto;padding:0 1.5rem}
+.flash{padding:.75rem 1.2rem;border-radius:8px;font-size:.9rem;margin-bottom:.5rem}
+.flash.success{background:#d1fae5;color:#065f46;border-left:4px solid var(--success)}
+.flash.error{background:#fee2e2;color:#991b1b;border-left:4px solid var(--danger)}
+
+/* LAYOUT */
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.page-header{margin-bottom:2rem}
+.page-header h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800}
+.page-header p{color:var(--muted);margin-top:.3rem}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
+
+/* FORMS */
+.form-group{margin-bottom:1.2rem}
+label{display:block;font-weight:500;font-size:.875rem;margin-bottom:.4rem;color:#374151}
+input,select,textarea{width:100%;padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:8px;font-size:.95rem;font-family:'DM Sans',sans-serif;background:#fff;transition:border .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal)}
+textarea{resize:vertical;min-height:90px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.4rem;border-radius:8px;font-weight:500;font-size:.9rem;cursor:pointer;border:none;transition:all .2s;font-family:'DM Sans',sans-serif}
+.btn-primary{background:var(--teal);color:#fff}.btn-primary:hover{background:#00796b}
+.btn-secondary{background:var(--ink);color:#fff}.btn-secondary:hover{background:#333}
+.btn-orange{background:var(--orange);color:#fff}.btn-orange:hover{background:#e65100}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--ink)}.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-sm{padding:.35rem .9rem;font-size:.82rem}
+.btn-danger{background:var(--danger);color:#fff}
+
+/* BADGES */
+.badge{display:inline-block;padding:.2rem .7rem;border-radius:20px;font-size:.75rem;font-weight:600}
+.badge-high{background:#fee2e2;color:#991b1b}
+.badge-medium{background:#fef3c7;color:#92400e}
+.badge-low{background:#d1fae5;color:#065f46}
+.badge-open{background:#dbeafe;color:#1e40af}
+.badge-teal{background:#ccfbf1;color:#0f766e}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center}
+.stat-card .num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--teal)}
+.stat-card .lbl{font-size:.8rem;color:var(--muted);margin-top:.2rem}
+
+/* MATCH RESULT */
+.match-item{display:flex;align-items:flex-start;gap:1rem;padding:1rem;border:1px solid var(--border);border-radius:10px;margin-bottom:.7rem;background:#fff}
+.score-ring{width:52px;height:52px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;flex-shrink:0}
+.match-info h4{font-weight:600;font-size:.95rem}
+.match-info p{color:var(--muted);font-size:.83rem;margin-top:.2rem}
+
+/* SPINNER */
+.spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-left:.4rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* SECTION TITLE */
+.section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+</style>
+{% block extra_style %}{% endblock %}
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="/">IDEO<span>NIX</span></a>
+  <div class="nav-links">
+    <a href="/tasks">Browse Tasks</a>
+    <a href="/analytics">Analytics</a>
+    {% if session.user_id %}
+      <a href="/dashboard">Dashboard</a>
+      <a href="/logout" class="btn-nav">Logout</a>
+    {% else %}
+      <a href="/login">Login</a>
+      <a href="/signup" class="btn-nav">Sign Up</a>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="flash-container">
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for cat,msg in messages %}
+    <div class="flash {{ cat }}">{{ msg }}</div>
+  {% endfor %}
+{% endwith %}
+</div>
+
+{% block content %}{% endblock %}
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
